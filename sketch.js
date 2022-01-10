@@ -20,11 +20,15 @@ var checkpoint;
 var die;
 var jump;
 
+var backgroound, backgrooundImg;
+
 
 function preload(){
-  trex_running = loadAnimation("trex1.png","trex3.png","trex4.png");
-  trex_collided = loadAnimation("trex_collided.png");
-  
+  trex_running = loadAnimation("Run (1).png", "Run (2).png","Run (3).png","Run (4).png","Run (5).png","Run (6).png","Run (7).png","Run (8).png");
+  trex_collided = loadAnimation("Dead (1).png","Dead (2).png","Dead (3).png","Dead (4).png","Dead (5).png","Dead (6).png","Dead (7).png","Dead (8).png",);
+  trex_jumping = loadAnimation("Jump (1).png","Jump (2).png","Jump (3).png","Jump (4).png","Jump (5).png","Jump (6).png","Jump (7).png","Jump (8).png",)
+
+
   groundImage = loadImage("ground2.png");
   
   cloudImage = loadImage("cloud.png");
@@ -35,6 +39,8 @@ function preload(){
   obstacle4 = loadImage("obstacle4.png");
   obstacle5 = loadImage("obstacle5.png");
   obstacle6 = loadImage("obstacle6.png");
+
+  backgrooundImg = loadImage("background.png");
 
   gameoverImg = loadImage("gameOver.png");
 
@@ -50,14 +56,21 @@ function preload(){
 function setup() {
   createCanvas(windowWidth, windowHeight);
 
+  backgroound= createSprite(500,100);
+  backgroound.addImage(backgrooundImg);
+  backgroound.scale= 3;
+
   restart = createSprite(width/2,height/2);
   restart.addImage(restartImg);
   restart.scale= 0.5;
-  
-  trex = createSprite(50,180,20,50);
+
+
+  trex = createSprite(70,180,20,50);
   trex.addAnimation("running", trex_running);
   trex.addAnimation("collided" , trex_collided);
-  trex.scale = 0.5;
+  trex.addAnimation("jumping" , trex_jumping);
+  trex.scale = 0.2;
+  
   
   ground = createSprite(width-50, height-200,400,20);
   ground.addImage("ground",groundImage);
@@ -112,7 +125,15 @@ function draw() {
         touches = []
 
         jump.play();
+
+        trex.changeAnimation("jumping", trex_jumping);
         
+    }
+
+    if(trex.y>523){
+
+      trex.changeAnimation("running",trex_running);
+
     }
 
     console.log(trex.y);
@@ -178,7 +199,7 @@ function draw() {
 }
 
 function spawnObstacles(){
- if (frameCount % 60 === 0){
+ if (frameCount % 100 === 0){
    var obstacle = createSprite(width,height-200,10,40);
    obstacle.velocityX = -6;
    obstacle.velocityX = -(4 + 2* (score/200));
